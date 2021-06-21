@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class Controller {
@@ -19,9 +20,22 @@ public class Controller {
        return repository.findAll();
     }
 
-    @PostMapping("/add")
+    @PostMapping(path = "/add")
     public UserMessage addMessage(@RequestBody UserMessage msg){
         return repository.save(msg);
+    }
+
+    @PostMapping(path = "/addform")
+    public UserMessage addMessage(@RequestBody String name){
+        //author=Nithin&company=TCS&message=Welcome
+        List<String> each=Optional.ofNullable(name).map(a->a.split("&")).map(Arrays::asList).orElse(Collections.emptyList());
+        Map<String, String> collect = each.stream().map(values -> values.split("=")).collect(Collectors.toMap(a -> a[0], a -> a[1]));
+        UserMessage userMessage=new UserMessage();
+        userMessage.setUserName(collect.get("author"));
+        userMessage.setCompany(collect.get("company"));
+        userMessage.setMessage(collect.get("message"));
+
+        return repository.save(userMessage);
     }
 
 }
