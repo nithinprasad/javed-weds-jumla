@@ -1,10 +1,7 @@
 package com.prasad.nithin.wedding.javed;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +33,11 @@ public class Controller {
         userMessage.setMessage(collect.get("message"));
 
         return repository.save(userMessage);
+    }
+
+    @DeleteMapping(path = "/delete/{id}")
+    public void addMessage(@PathVariable long id){
+         repository.deleteById(id);
     }
 
 }
