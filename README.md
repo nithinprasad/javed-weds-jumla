@@ -3,5 +3,5 @@ Wedding Website for Javed and Jumla
 
 you can run cide by using
 ```python
-./mvnw springboot:run
+./mvnw spring-boot:run
 ```
