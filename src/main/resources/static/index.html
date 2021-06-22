@@ -435,7 +435,7 @@
 				<div class="row">
 					<div class="col-md-12 animate-box">
 						<div class="wrap-testimony">
-							<div class="owl-carousel-fullwidth">
+							<div class="owl-carousel-fullwidth" id="testimonial">
 								<div class="item">
 									<div class="testimony-slide active text-center">
 										<figure>
@@ -469,17 +469,7 @@
 										</blockquote>
 									</div>
 								</div>
-								<div class="item">
-									<div class="testimony-slide active text-center">
-										<figure>
-											<img src="images/couple-1.jpg" alt="user">
-										</figure>
-										<span>Nithin Prasad, via <a href="#" class="twitter">TCS</a></span>
-										<blockquote>
-											<p>"Best Wishes Machi"</p>
-										</blockquote>
-									</div>
-								</div>
+
 							</div>
 						</div>
 					</div>
@@ -575,7 +565,7 @@
 								</div>
 							</div>
 							<div class="col-md-4 col-sm-4">
-								<button type="submit" class="btn btn-default btn-block"  id="submitButton">Wish</button>
+								<button type="button" class="btn btn-default btn-block"  id="submitButton" onclick="callSubmit(event)">Wish</button>
 							</div>
 						</form>
 					</div>
@@ -695,6 +685,65 @@
           url: "./all",
           type: "GET",
           success: function(result) {
+            var d = '';
+            var flag=false;
+             $.each(result, function(index, it){
+             flag=true;
+
+                     var string='<div class="item">'+
+									'<div class="testimony-slide  text-center">'+
+										'<figure>'+
+											'<img src="images/couple-1.jpg" alt="user">'+
+										'</figure>'+
+										'<span>'+it.userName+', via <a href="#" class="twitter">'+it.company+'</a></span>'+
+										'<blockquote>'+
+											'<p>"'+it.message+'"</p>'+
+										'</blockquote>'+
+									'</div>'+
+								'</div>';
+
+                     d=d+string;
+
+                });
+                console.log(d);
+                if(flag){
+                document.getElementById("testimonial").innerHTML=d;
+                }
+
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
+
+      });
+    </script>
+
+
+
+
+	<script>
+
+		function callSubmit(e){
+		e.preventDefault();
+		//debugger
+		var form = document.querySelector("#submitwishes");
+		//alert(form.querySelector('input[name="userName"]').value);
+		var data = {
+			userName : form.querySelector('input[name="userName"]').value,
+			message : form.querySelector('input[name="message"]').value,
+			company : form.querySelector('input[name="company"]').value
+		}
+		var bodyToPass=JSON.stringify(data);
+		alert(bodyToPass);
+		$.ajax({
+          url: "./add",
+          type: "POST",
+          data: bodyToPass,
+          headers: {
+                   'Content-Type': 'application/json',
+                },
+          success: function(result) {
              $.each(result, function(index, it){
              console.log(it);
                      var d = $('<div>'+ it.userName +'</div>');
@@ -705,36 +754,6 @@
             console.log(error);
           }
         });
-      });
-    </script>
-
-
-
-	<script>
-
-		function callSubmit(e){
-		e.preventDefault();
-		debugger
-		//var form = document.querySelector("#submitwishes");
-		//alert(form.querySelector('input[name="userName"]').value);
-		var data = {
-			userName : form.querySelector('input[name="userName"]').value,
-			message : form.querySelector('input[name="message"]').value,
-			company : form.querySelector('input[name="company"]').value
-		}
-		fetch("/add", {
-			method: 'POST',
-			body: data
-		}).then(function (response) {
-			return response.json();
-		})
-		.then(function (myJson) {
-			console.log("myJson", myJson);
-			document.querySelector("#ipText").innerHTML = myJson.ip;
-		})
-		.catch(function (error) {
-			console.log("Error: " + error);
-		});
 
 
 
