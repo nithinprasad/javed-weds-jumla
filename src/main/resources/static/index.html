@@ -555,17 +555,17 @@
 				</div>
 				<div class="row animate-box">
 					<div class="col-md-10 col-md-offset-1">
-						<form class="form-inline"  action="addform" id="submitwishes"method="post">
+						<form class="form-inline"   action="add" id="submitwishes" method="post">
 							<div class="col-md-4 col-sm-4">
 								<div class="form-group">
 									<label for="name" class="sr-only">Name</label>
-									<input type="name" class="form-control" id="name"  name="author" placeholder="Name">
+									<input type="name" class="form-control" id="name"  name="userName" placeholder="Name">
 								</div>
 							</div>
 							<div class="col-md-4 col-sm-4">
 								<div class="form-group">
-									<label for="email" class="sr-only">Company</label>
-									<input type="text" class="form-control" name="company" id="email" placeholder="Company eg TCS" value="">
+									<label for="email" class="sr-only">Relationship</label>
+									<input type="text" class="form-control" name="company" id="email" placeholder="Relationship  Friend" value="">
 								</div>
 							</div>
 							<div class="col-md-4 col-sm-4">
@@ -575,7 +575,7 @@
 								</div>
 							</div>
 							<div class="col-md-4 col-sm-4">
-								<button type="submit" class="btn btn-default btn-block" onclick="callSubmit()">Wish</button>
+								<button type="submit" class="btn btn-default btn-block"  id="submitButton" onclick="callSubmit()">Wish</button>
 							</div>
 						</form>
 					</div>
@@ -708,37 +708,45 @@
       });
     </script>
 
+
+
 	<script>
-	function formSubmit(){
+
+		function callSubmit(){
+		//e.preventDefault();
 		alert("reached here");
-		var form = document.querySelector("#submitwishes");
-		alert(form);
-	}
+		//var form = document.querySelector("#submitwishes");
+		//alert(form.querySelector('input[name="userName"]').value);
+		var data = {
+          userName : form.querySelector('input[name="userName"]').value,
+          message : form.querySelector('input[name="message"]').value,
+          company : form.querySelector('input[name="company"]').value
+        }
+       fetch("./add")
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (myJson) {
+        document.querySelector("#ipText").innerHTML = myJson.ip;
+      })
+      .catch(function (error) {
+        console.log("Error: " + error);
+      });
 
 
-	//$('#submitwishes').onsubmit = async (e) => {
-      //e.preventDefault();
-      //var form = document.querySelector("#formElem");
-     // var form = document.forms[0];
 
-        //data = {
-          //firstname : form.querySelector('input[name="firstname"]').value,
-          //lastname : form.querySelector('input[name="lastname"]').value,
-          //age : 5
-        //}
-
-        //let response = await fetch('http://localhost:8482/decode', {
+        //alert(JSON.stringify(data));
+        // let response = fetch('./add', {
           //      method: 'POST', // or 'PUT'
             //    headers: {
               //      'Content-Type': 'application/json',
-               // },
+                //},
                 //body: JSON.stringify(data),
-       // })
-
-        //let text = await response.text(); // read response body as text
-        //document.querySelector("#decoded").innerHTML = text;
-    //};
-
+       //})
+       //let text = response.text()
+       //alert(text);
+       return false;
+	}
 	</script>
 
 	</body>

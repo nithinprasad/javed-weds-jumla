@@ -31,7 +31,7 @@ public class Controller {
         List<String> each=Optional.ofNullable(name).map(a->a.split("&")).map(Arrays::asList).orElse(Collections.emptyList());
         Map<String, String> collect = each.stream().map(values -> values.split("=")).collect(Collectors.toMap(a -> a[0], a -> a[1]));
         UserMessage userMessage=new UserMessage();
-        userMessage.setUserName(collect.get("author"));
+        userMessage.setUserName(collect.get("userName"));
         userMessage.setCompany(collect.get("company"));
         userMessage.setMessage(collect.get("message"));
 
