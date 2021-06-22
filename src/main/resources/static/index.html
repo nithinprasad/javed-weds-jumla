@@ -12,12 +12,12 @@
 	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
 	<meta name="author" content="FREEHTML5.CO" />
 
-  <!-- 
+  <!--
 	//////////////////////////////////////////////////////
 
-	FREE HTML5 TEMPLATE 
+	FREE HTML5 TEMPLATE
 	DESIGNED & DEVELOPED by FREEHTML5.CO
-		
+
 	Website: 		http://freehtml5.co/
 	Email: 			info@freehtml5.co
 	Twitter: 		http://twitter.com/fh5co
@@ -39,7 +39,7 @@
 
 	<link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
-	
+
 	<!-- Animate.css -->
 	<link rel="stylesheet" href="css/animate.css">
 	<!-- Icomoon Icon Fonts-->
@@ -66,9 +66,9 @@
 
 	</head>
 	<body>
-		
+
 	<div class="fh5co-loader"></div>
-	
+
 	<div id="page">
 	<nav class="fh5co-nav" role="navigation">
 		<div class="container">
@@ -108,7 +108,7 @@
 					</ul>
 				</div>
 			</div>
-			
+
 		</div>
 	</nav>
 
@@ -286,8 +286,8 @@
 			<div class="row row-bottom-padded-md">
 				<div class="col-md-12">
 					<ul id="fh5co-gallery-list">
-						
-						<li class="one-third animate-box" data-animate-effect="fadeIn" style="background-image: url(images/gallery-1.jpg); "> 
+
+						<li class="one-third animate-box" data-animate-effect="fadeIn" style="background-image: url(images/gallery-1.jpg); ">
 						<a href="images/gallery-1.jpg">
 							<!--<div class="case-studies-summary">
 								<span>14 Photos</span>
@@ -348,7 +348,7 @@
 							</a>
 						</li>
 
-						<li class="one-third animate-box" data-animate-effect="fadeIn" style="background-image: url(images/gallery-8.jpg); "> 
+						<li class="one-third animate-box" data-animate-effect="fadeIn" style="background-image: url(images/gallery-8.jpg); ">
 							<a href="#" class="color-5">
 								<div class="case-studies-summary">
 									<span>90 Photos</span>
@@ -364,7 +364,7 @@
 								</div>
 							</a>
 						</li>-->
-					</ul>		
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -490,7 +490,7 @@
 
 	<!--<div id="fh5co-services" class="fh5co-section-gray">
 		<div class="container">
-			
+
 			<div class="row animate-box">
 				<div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
 					<h2>We Offer Services</h2>
@@ -540,7 +540,7 @@
 				</div>
 			</div>
 
-			
+
 		</div>
 	</div>-->
 
@@ -555,7 +555,7 @@
 				</div>
 				<div class="row animate-box">
 					<div class="col-md-10 col-md-offset-1">
-						<form class="form-inline"   action="add" id="submitwishes" method="post">
+						<form class="form-inline"   action="add" id="submitwishes" method="post" onSubmit="callSubmit">
 							<div class="col-md-4 col-sm-4">
 								<div class="form-group">
 									<label for="name" class="sr-only">Name</label>
@@ -575,7 +575,7 @@
 								</div>
 							</div>
 							<div class="col-md-4 col-sm-4">
-								<button type="submit" class="btn btn-default btn-block"  id="submitButton" onclick="callSubmit()">Wish</button>
+								<button type="submit" class="btn btn-default btn-block"  id="submitButton">Wish</button>
 							</div>
 						</form>
 					</div>
@@ -623,7 +623,7 @@
 			<div class="row copyright">
 				<div class="col-md-12 text-center">
 					<p>
-						<small class="block">&copy; 2016 Free HTML5. All Rights Reserved.</small> 
+						<small class="block">&copy; 2016 Free HTML5. All Rights Reserved.</small>
 						<small class="block">Designed by <a href="http://freehtml5.co/" target="_blank">FREEHTML5.co</a> Demo Images: <a href="http://unsplash.co/" target="_blank">Unsplash</a></small>
 					</p>
 					<p>
@@ -644,7 +644,7 @@
 	<div class="gototop js-top">
 		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
 	</div>
-	
+
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
 	<!-- jQuery Easing -->
@@ -712,26 +712,29 @@
 
 	<script>
 
-		function callSubmit(){
-		//e.preventDefault();
-		alert("reached here");
+		function callSubmit(e){
+		e.preventDefault();
+		debugger
 		//var form = document.querySelector("#submitwishes");
 		//alert(form.querySelector('input[name="userName"]').value);
 		var data = {
-          userName : form.querySelector('input[name="userName"]').value,
-          message : form.querySelector('input[name="message"]').value,
-          company : form.querySelector('input[name="company"]').value
-        }
-       fetch("./add")
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (myJson) {
-        document.querySelector("#ipText").innerHTML = myJson.ip;
-      })
-      .catch(function (error) {
-        console.log("Error: " + error);
-      });
+			userName : form.querySelector('input[name="userName"]').value,
+			message : form.querySelector('input[name="message"]').value,
+			company : form.querySelector('input[name="company"]').value
+		}
+		fetch("/add", {
+			method: 'POST',
+			body: data
+		}).then(function (response) {
+			return response.json();
+		})
+		.then(function (myJson) {
+			console.log("myJson", myJson);
+			document.querySelector("#ipText").innerHTML = myJson.ip;
+		})
+		.catch(function (error) {
+			console.log("Error: " + error);
+		});
 
 
 
@@ -751,4 +754,3 @@
 
 	</body>
 </html>
-
