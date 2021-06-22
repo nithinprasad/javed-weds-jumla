@@ -434,8 +434,8 @@
 				</div>
 				<div class="row">
 					<div class="col-md-12 animate-box">
-						<div class="wrap-testimony">
-							<div class="owl-carousel-fullwidth" id="testimonial">
+						<div class="wrap-testimony" id="testimonial">
+							<div class="owl-carousel-fullwidth">
 								<div class="item">
 									<div class="testimony-slide active text-center">
 										<figure>
@@ -680,44 +680,63 @@
 </script>
 
 	<script>
-      $(document).ready(function() {
-        $.ajax({
-          url: "./all",
-          type: "GET",
-          success: function(result) {
-            var d = '';
-            var flag=false;
-             $.each(result, function(index, it){
-             flag=true;
+		var testimonialCarousel = function(){
+			var owl = $('.owl-carousel-fullwidth');
+			owl.owlCarousel({
+				items: 1,
+				loop: true,
+				margin: 0,
+				responsiveClass: true,
+				nav: false,
+				dots: true,
+				smartSpeed: 800,
+				autoHeight: true,
+			});
+		};
 
-                     var string='<div class="item">'+
-									'<div class="testimony-slide  text-center">'+
-										'<figure>'+
-											'<img src="images/couple-1.jpg" alt="user">'+
-										'</figure>'+
-										'<span>'+it.userName+', via <a href="#" class="twitter">'+it.company+'</a></span>'+
-										'<blockquote>'+
-											'<p>"'+it.message+'"</p>'+
-										'</blockquote>'+
-									'</div>'+
-								'</div>';
+		function getTestimonialData () {
+			$.ajax({
+				url: "./all",
+				type: "GET",
+				success: function(result) {
+					var d = '';
+					var flag=false;
+						$.each(result, function(index, it){
+						flag=true;
 
-                     d=d+string;
+										var string='<div class="item">'+
+								'<div class="testimony-slide  text-center">'+
+									'<figure>'+
+										'<img src="images/couple-1.jpg" alt="user">'+
+									'</figure>'+
+									'<span>'+it.userName+', via <a href="#" class="twitter">'+it.company+'</a></span>'+
+									'<blockquote>'+
+										'<p>"'+it.message+'"</p>'+
+									'</blockquote>'+
+								'</div>'+
+							'</div>';
 
-                });
-                console.log(d);
-                if(flag){
-                document.getElementById("testimonial").innerHTML=d;
-                }
+							d= `${d} ${string}`
 
-          },
-          error: function(error) {
-            console.log(error);
-          }
-        });
+							});
+							console.log(d);
+							if(flag){
+								document.getElementById("testimonial").innerHTML=`<div class="owl-carousel-fullwidth">${d}</div>`;
+								if (result.length > 1) {
+									testimonialCarousel()
+								}
+							}
 
-      });
-    </script>
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
+		}
+		$(document).ready(function() {
+			getTestimonialData()
+		});
+  </script>
 
 
 
@@ -725,35 +744,30 @@
 	<script>
 
 		function callSubmit(e){
-		e.preventDefault();
-		//debugger
-		var form = document.querySelector("#submitwishes");
-		//alert(form.querySelector('input[name="userName"]').value);
-		var data = {
-			userName : form.querySelector('input[name="userName"]').value,
-			message : form.querySelector('input[name="message"]').value,
-			company : form.querySelector('input[name="company"]').value
-		}
-		var bodyToPass=JSON.stringify(data);
-		alert(bodyToPass);
-		$.ajax({
-          url: "./add",
-          type: "POST",
-          data: bodyToPass,
-          headers: {
-                   'Content-Type': 'application/json',
-                },
-          success: function(result) {
-             $.each(result, function(index, it){
-             console.log(it);
-                     var d = $('<div>'+ it.userName +'</div>');
-                    //alert(d);   //doesn't work
-                });
-          },
-          error: function(error) {
-            console.log(error);
-          }
-        });
+			e.preventDefault();
+			//debugger
+			var form = document.querySelector("#submitwishes");
+			//alert(form.querySelector('input[name="userName"]').value);
+			var data = {
+				userName : form.querySelector('input[name="userName"]').value,
+				message : form.querySelector('input[name="message"]').value,
+				company : form.querySelector('input[name="company"]').value
+			}
+			var bodyToPass=JSON.stringify(data);
+			$.ajax({
+				url: "./add",
+				type: "POST",
+				data: bodyToPass,
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				success: function(result) {
+					getTestimonialData()
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
 
 
 
